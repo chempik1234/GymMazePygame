@@ -51,7 +51,11 @@ class Game:
 
         self.mixer = pygame.mixer
         self.mixer.init()
-        self.music = self.mixer.Sound("sounds/music.mp3")
+        self.music_name = "sounds/music.mp3"
+
+        self.track_end = pygame.USEREVENT + 1
+        pygame.mixer.music.set_endevent(self.track_end)
+        pygame.mixer.music.load(self.music_name)
 
     def loading_screen(self):
         self.screen.blit(self.win_image, (0, 0))
@@ -76,8 +80,8 @@ class Game:
                 running = False
 
     def run_gameplay(self):
-        self.music.stop()
-        self.music.play()
+        pygame.mixer.music.load(self.music_name)
+        pygame.mixer.music.play()
         running = True
         bulat = Hero(CustomSprite(self.character_dict[self.character_id], (self.all_sprites, self.heroes_group),
                                   0, self.screen_size[1] - self.hero_max_size),
@@ -94,6 +98,9 @@ class Game:
             if not any(i.alive() for i in pickups):
                 self.all_sprites.add(portal)
             for event in pygame.event.get():
+                if event.type == self.track_end:
+                    pygame.mixer.music.load(self.music_name)
+                    pygame.mixer.music.play()
                 if event.type == pygame.QUIT:
                     running = False
                     self.game_mode = 2
@@ -144,11 +151,11 @@ class Game:
             self.display.flip()
 
     def run_win_screen(self):
-        self.music.stop()
+        pygame.mixer.music.stop()
         self.screen.blit(self.win_image, (0, 0))
         if self.score:
             text = ['ВЫ ВЫИГРАЛИ!', 'ОЧКИ: ' + str(self.score)]
-            y = self.screen_size[1] * 0.9
+            y = self.screen_size[1] * 0.5
         else:
             text = ["Добро", "пожаловать", " в качалку!"]
             pygame.draw.polygon(self.screen, pygame.Color("black"),
