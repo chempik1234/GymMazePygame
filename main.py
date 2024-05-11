@@ -28,16 +28,22 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
 
         self.game_mode = None
+        self.character_id = None
 
         self.win_image = pygame.transform.scale(load_image("screen.png"), self.screen_size)
         self.background_image = pygame.transform.scale(load_image("background.png"), self.screen_size)
 
         self.hero_max_size = hero_max_size
 
-        self.bulat_image = image_max_size(load_image("bulat.png"), self.hero_max_size)
+        self.bulat_original = load_image("bulat.png")
+        self.misha_original = load_image("misha.png")
+        self.bulat_image = image_max_size(self.bulat_original, self.hero_max_size)
+        self.misha_image = image_max_size(self.misha_original, self.hero_max_size)
         self.enemy_image = image_max_size(load_image("enemy.png"), self.hero_max_size)
         self.pickup_image = image_max_size(load_image("pickup.png"), self.hero_max_size * 0.8)
         self.portal_image = image_max_size(load_image("portal.png"), self.hero_max_size * 0.8)
+
+        self.character_dict = [self.bulat_image, self.misha_image]
 
         self.score = None
 
@@ -56,7 +62,7 @@ class Game:
         self.display.flip()
 
     def run(self):
-        self.game_mode = 0
+        self.game_mode = 1
         running = True
         while running:
             for sprite in self.all_sprites:
@@ -73,7 +79,7 @@ class Game:
         self.music.stop()
         self.music.play()
         running = True
-        bulat = Hero(CustomSprite(self.bulat_image, (self.all_sprites, self.heroes_group),
+        bulat = Hero(CustomSprite(self.character_dict[self.character_id], (self.all_sprites, self.heroes_group),
                                   0, self.screen_size[1] - self.hero_max_size),
                      self.background_group, power=0, bounds=self.screen_size,
                      pickups_group=self.pickups_group, heroes_group=self.heroes_group)
@@ -140,12 +146,39 @@ class Game:
     def run_win_screen(self):
         self.music.stop()
         self.screen.blit(self.win_image, (0, 0))
-        quick_text(['ВЫ ВЫИГРАЛИ!', 'ОЧКИ: ' + str(self.score)], 0,
-                   self.screen_size[1] * 0.2, self.screen)
-        quick_text(['ВЫ ВЫИГРАЛИ!', 'ОЧКИ: ' + str(self.score)], 0,
-                   self.screen_size[1] * 0.2 - 2, self.screen, color=pygame.Color("white"))
-        quick_text(["нажмите любую кнопку"], 0,
-                   self.screen_size[1] * 0.5, self.screen, color=pygame.Color("white"),
+        if self.score:
+            text = ['ВЫ ВЫИГРАЛИ!', 'ОЧКИ: ' + str(self.score)]
+            y = self.screen_size[1] * 0.2
+        else:
+            text = ["Добро", "пожаловать", " в качалку!"]
+            pygame.draw.polygon(self.screen, pygame.Color("black"),
+                                ((0, self.screen_size[1] * 0.6),
+                                 (self.screen_size[0] * 0.9, self.screen_size[1] * 0.45),
+                                 (self.screen_size[0] * 0.8, self.screen_size[1] * 0.9),
+                                 (0, self.screen_size[1] * 0.9)))
+            pygame.draw.polygon(self.screen, pygame.Color("red"),
+                                ((0, self.screen_size[1] * 0.65),
+                                 (self.screen_size[0] * 0.95, self.screen_size[1] * 0.45),
+                                 (self.screen_size[0] * 0.7, self.screen_size[1] * 0.9),
+                                 (0, self.screen_size[1] * 0.9)))
+            y = self.screen_size[0] * 0.9
+        self.screen.fill(pygame.Color("red"), (self.screen_size[0] // 10,
+                                               self.screen_size[1] // 8 - 5,
+                                               self.screen_size[0] * 8 // 10,
+                                               self.screen_size[1] * 0.3 + 10))
+        bulat_orig = image_max_size(self.bulat_original, self.screen_size[1] * 0.3)
+        self.screen.blit(bulat_orig,
+                         (self.screen_size[0] // 2 - 50 - bulat_orig.get_width(),
+                          self.screen_size[1] // 8))
+        self.screen.blit(image_max_size(self.misha_original, self.screen_size[1] * 0.3),
+                         (self.screen_size[0] // 2 + 50,
+                          self.screen_size[1] // 8))
+        quick_text(text, 0,
+                   y, self.screen)
+        quick_text(text, 0,
+                   y - 2, self.screen, color=pygame.Color("white"))
+        quick_text(["выберите персонажа"], 0,
+                   y + self.screen_size[1] * 0.25, self.screen, color=pygame.Color("white"),
                    font_size=36)
         running = True
         while running:
@@ -153,16 +186,23 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                     self.game_mode = 2
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.pos[0] > self.screen_size[0] // 2:
+                        self.character_id = 1
+                    else:
+                        self.character_id = 0
                     running = False
                     self.game_mode = 0
+                # if event.type == pygame.KEYDOWN:
+                #     running = False
+                #     self.game_mode = 0
             self.display.flip()
 
     def generate_enemies(self):
         res = []
         for i in range(4):
             hero = Hero(CustomSprite(self.enemy_image, (self.heroes_group, self.all_sprites),
-                                     0, 0), self.background_group, bounds=self.screen_size, power=i + 2,
+                                     0, 0), self.background_group, bounds=self.screen_size, power=100,
                         speed=3)
             good = False
             while not good:
