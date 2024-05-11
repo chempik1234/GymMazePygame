@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee84b2a7-cc42-46b3-9e77-2304341707ef" name="Changes" comment="ready">
-      <change afterPath="$PROJECT_DIR$/sprites/misha.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sprites/screen.png" beforeDir="false" afterPath="$PROJECT_DIR$/sprites/screen.png" afterDir="false" />
-    </list>
+    <list default="true" id="ee84b2a7-cc42-46b3-9e77-2304341707ef" name="Changes" comment="better" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,12 +61,21 @@
       <option name="project" value="LOCAL" />
       <updated>1715434330454</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="better">
+      <option name="closed" value="true" />
+      <created>1715436608953</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715436608953</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ready" />
-    <option name="LAST_COMMIT_MESSAGE" value="ready" />
+    <MESSAGE value="better" />
+    <option name="LAST_COMMIT_MESSAGE" value="better" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

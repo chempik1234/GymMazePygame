@@ -148,7 +148,7 @@ class Game:
         self.screen.blit(self.win_image, (0, 0))
         if self.score:
             text = ['ВЫ ВЫИГРАЛИ!', 'ОЧКИ: ' + str(self.score)]
-            y = self.screen_size[1] * 0.2
+            y = self.screen_size[1] * 0.9
         else:
             text = ["Добро", "пожаловать", " в качалку!"]
             pygame.draw.polygon(self.screen, pygame.Color("black"),
@@ -187,12 +187,13 @@ class Game:
                     running = False
                     self.game_mode = 2
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        running = False
+                        self.game_mode = 0
                     if event.pos[0] > self.screen_size[0] // 2:
                         self.character_id = 1
                     else:
                         self.character_id = 0
-                    running = False
-                    self.game_mode = 0
                 # if event.type == pygame.KEYDOWN:
                 #     running = False
                 #     self.game_mode = 0
